@@ -1,7 +1,10 @@
 import React from 'react';
 
-const withUser = (WrappedComponent, getUser) => {
-    return class extends React.Component {
+const getDisplayName = (WrappedComponent) =>
+    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+const withUser = (WrappedComponent, getUser = () => '') => {
+    class WithUser extends React.Component {
         constructor(props) {
             super(props);
 
@@ -20,6 +23,9 @@ const withUser = (WrappedComponent, getUser) => {
             return this.state.user ? <WrappedComponent user={this.state.user} /> : <p>Welcome guest!</p>;
         }
     }
+
+    WithUser.displayName = `WithUser(${getDisplayName(WrappedComponent)})`;
+    return WithUser;
 }
 
 export { withUser };
